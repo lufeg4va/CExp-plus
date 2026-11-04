@@ -3,7 +3,7 @@
 $pagina_activa = $pagina_activa ?? '';
 ?>
 
-<aside class="col-md-3 col-lg-2 p-3 bg-white d-flex flex-column border-end shadow-sm" id="sidebar">
+<aside class="col-md-3 col-lg-2 p-3 bg-white d-flex flex-column border-end shadow-sm vh-100 sticky-top" id="sidebar">
 
     <!-- Perfil del Médico -->
     <div class="profile-card d-flex align-items-center gap-2 p-2 mb-4 border rounded-3 bg-light">

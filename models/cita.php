@@ -50,7 +50,7 @@ class cita {
         return $stmt->execute();
     }
 
-    // 5. ACTUALIZAR (Update): Modificar una cita existente por su id_cita
+    // 5. Actualizar y  modificar una cita existente por su id_cita
     public function actualizarCita($id_cita, $id_paciente, $fecha, $estado) {
         $query = "UPDATE " . $this->table_name . " SET id_paciente = ?, fecha = ?, estado = ? WHERE id_cita = ?";
         $stmt = $this->conn->prepare($query);
