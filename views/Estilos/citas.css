@@ -1,0 +1,22 @@
+:root {
+    --cex-bg: #fceded;           /* Fondo general */
+    --cex-blue-main: #0d59e8;    /* botones y links activos */
+    --cex-blue-dark: #3b82f6;    /* para texto seleccionado */
+    --cex-text: #0b1c36;         /* Texto oscuro principal */
+    --cex-logout-text: #b91c1c;  /* texto de cerrar sesión */
+    --cex-badge-ok: #d1fae5;     /* para citas completadas */
+    --cex-badge-cancel: #fee2e2; /* para citas canceladas */
+}
+
+
+.sidebar-item { color: #64748b; border-radius: 12px; text-decoration: none; transition: 0.2s; }
+.sidebar-item.active { background-color: var(--cex-blue-main); color: #ffffff !important; }
+.sidebar-item:hover:not(.active) { background-color: #e6f0fe; color: #000000; 
+}
+.doctor-avatar {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    background-color: #a0c4ff; /* o el celeste de tu diseño */
+}
+

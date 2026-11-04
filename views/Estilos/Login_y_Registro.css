@@ -1,0 +1,62 @@
+
+.login-bg {
+    background-color: #E2ECFE; 
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px; 
+}
+
+/* --- ICONO DEL LOGO --- */
+.logo-icon {
+    font-size: 3.5rem;
+    color: #00d8b8; 
+}
+
+/* --- ESTILOS DE LOS INPUTS--- */
+.custom-input {
+    background-color: #E2ECFE; /* Fondo azulito de los inputs */
+    border: none;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    border-radius: 8px;
+}
+
+.custom-input:focus {
+    background-color: #E2ECFE;
+    box-shadow: 0 0 0 0.25rem rgba(253, 85, 13, 0.25);
+}
+
+/* --- BOTÓN PRINCIPAL --- */
+.btn-login {
+    
+    border-color: #0b3ad6;
+}
+.btn-login:hover {
+    background-color: #b42828;
+}
+
+
+.custom-tabs {
+    background-color: #E2ECFE; 
+    border-radius: 8px;
+    padding: 0.25rem;
+    display: flex; 
+}
+
+.custom-tabs .tab-btn {
+    flex: 1; 
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #6c757d; 
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+/* Btn_inicio Sesion*/
+.custom-tabs .tab-btn.active {
+    background-color: #0b3ad6; 
+    color: white; 
+}
