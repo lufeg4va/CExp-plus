@@ -57,10 +57,21 @@ document.addEventListener('DOMContentLoaded', function () {
                         <span class="small fw-semibold text-dark">${esVistaDia ? '— ' + arg.event.title : ''}</span>
                     </div>
                     <menu class="d-flex gap-1 m-0 p-0 flex-shrink-0">
-                        <button type="button" class="btn btn-sm p-0 border-0 text-primary" title="Editar cita" data-bs-toggle="modal" data-bs-target="#modalCita" data-id="${arg.event.id}">
+                        <button type="button" class="btn btn-sm p-0 border-0 text-primary" title="Editar cita"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalCita"
+                            data-id="${arg.event.id}"
+                            data-paciente="${props.id_paciente}"
+                            data-fecha="${arg.event.startStr.substring(0, 16)}"
+                            data-estado="${estado}">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-sm p-0 border-0 text-danger" title="Eliminar cita" data-id="${arg.event.id}">
+                        <button type="button" class="btn btn-sm p-0 border-0 text-danger"
+                            title="Eliminar cita"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalEliminarCita"
+                            data-id="${arg.event.id}"
+                            data-paciente="${arg.event.title}">
                             <i class="bi bi-trash"></i>
                         </button>
                     </menu>
@@ -169,4 +180,49 @@ document.addEventListener('DOMContentLoaded', function () {
         if (el) el.addEventListener('change', aplicarFiltros);
     });
     if (filtroPaciente) filtroPaciente.addEventListener('input', aplicarFiltros);
+
+    // Rellenar o limpiar el Modal al abrirse (Crear vs Editar)
+    const modalCitaEl = document.getElementById('modalCita');
+    if (modalCitaEl) {
+        modalCitaEl.addEventListener('show.bs.modal', function (event) {
+            const boton = event.relatedTarget;
+            const inputIdCita = document.getElementById('id_cita');
+            const selectPaciente = document.getElementById('id_paciente');
+            const inputFecha = document.getElementById('fecha');
+            const selectEstado = document.getElementById('estado');
+
+            if (boton && boton.dataset.id) {
+                // Modo Editar: Rellenar campos con los datos de la cita seleccionada
+                inputIdCita.value = boton.dataset.id;
+                selectPaciente.value = boton.dataset.paciente;
+                inputFecha.value = boton.dataset.fecha;
+                selectEstado.value = boton.dataset.estado;
+            } else {
+                // Modo Crear (+ Nueva cita): Limpiar campos
+                inputIdCita.value = '';
+                selectPaciente.value = '';
+                inputFecha.value = '';
+                selectEstado.value = 'programada';
+            }
+        });
+    }
+
+    // Rellenar el Modal de Confirmación de Eliminación al abrirse
+    const modalEliminarEl = document.getElementById('modalEliminarCita');
+    if (modalEliminarEl) {
+        modalEliminarEl.addEventListener('show.bs.modal', function (event) {
+            const boton = event.relatedTarget;
+            const nombrePacienteEl = document.getElementById('nombrePacienteEliminar');
+            const btnConfirmarEl = document.getElementById('btnConfirmarEliminar');
+
+            if (boton && boton.dataset.id) {
+                if (nombrePacienteEl) {
+                    nombrePacienteEl.textContent = boton.dataset.paciente || '';
+                }
+                if (btnConfirmarEl) {
+                    btnConfirmarEl.href = '../controllers/citaController.php?accion=eliminar&id=' + boton.dataset.id;
+                }
+            }
+        });
+    }
 });

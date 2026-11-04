@@ -69,4 +69,3 @@ $pagina_activa = $pagina_activa ?? '';
         <a href="../controllers/logoutController.php" class="btn btn-danger w-100"><i class="bi bi-box-arrow-right m-1"></i>Cerrar sesión</a>
     </div>
 </aside>
-

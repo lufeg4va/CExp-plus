@@ -1,59 +1,51 @@
 <?php
+require_once '../config/database.php';
+require_once '../models/cita.php';
+
 $titulo_pagina = 'Citas - Consultorio Medico';
 $pagina_activa = 'citas';
 $cargar_fullcalendar = true;
 
+// Conectar a la base de datos 
+$database = new Database();
+$db = $database->getConnection();
+$citaModel = new cita($db);
 
-$medicos = $medicos ?? [
-    ['id_medico' => 1, 'nombre_completo' => 'Dr. Paco Sanchez', 'especialidad' => 'Medicina General']
-];
+// Obtener lista de médicos 
+$medicos_bd = $citaModel->obtenerMedicos();
+$medicos = [];
+foreach ($medicos_bd as $m) {
+    $medicos[] = [
+        'id_medico'       => $m['id_medico'],
+        'nombre_completo' => 'Dr. ' . $m['nombre'] . ' ' . $m['apellido_paterno'],
+        'especialidad'    => $m['especialidad']
+    ];
+}
 
+// Obtener lista de pacientes para el modal de Nueva Cita
+$pacientes_recientes = $citaModel->obtenerPacientes();
 
-$eventos_citas = $eventos_citas ?? [
-    [
-        'id'    => 1,
-        'title' => 'Gael Salvador Alvarado',
-        'start' => '2026-10-12T09:30:00',
-        'end'   => '2026-10-12T10:30:00',
-        'extendedProps' => ['id_paciente' => 1, 'id_medico' => 1, 'medico' => 'Dr. Paco Sanchez', 'estado' => 'concluida']
-    ],
-    [
-        'id'    => 2,
-        'title' => 'Alejandro Garduno',
-        'start' => '2026-10-12T11:00:00',
-        'end'   => '2026-10-12T12:00:00',
-        'extendedProps' => ['id_paciente' => 2, 'id_medico' => 1, 'medico' => 'Dr. Paco Sanchez', 'estado' => 'concluida']
-    ],
-    [
-        'id'    => 3,
-        'title' => 'Dair Castillo',
-        'start' => '2026-10-13T11:00:00',
-        'end'   => '2026-10-13T12:00:00',
-        'extendedProps' => ['id_paciente' => 3, 'id_medico' => 1, 'medico' => 'Dr. Paco Sanchez', 'estado' => 'confirmada']
-    ],
-    [
-        'id'    => 4,
-        'title' => 'Ximena Flores',
-        'start' => '2026-10-13T14:00:00',
-        'end'   => '2026-10-13T15:00:00',
-        'extendedProps' => ['id_paciente' => 4, 'id_medico' => 1, 'medico' => 'Dr. Paco Sanchez', 'estado' => 'cancelada']
-    ],
-    [
-        'id'    => 5,
-        'title' => 'Joshua Shadahi Belmontes',
-        'start' => '2026-10-14T09:00:00',
-        'end'   => '2026-10-14T10:00:00',
-        'extendedProps' => ['id_paciente' => 5, 'id_medico' => 1, 'medico' => 'Dr. Paco Sanchez', 'estado' => 'programada']
-    ]
-];
+// 4. Obtener las citas 
+$citas_bd = $citaModel->obtenerCitas();
+$eventos_citas = [];
 
+foreach ($citas_bd as $c) {
+    $timestamp_inicio = strtotime($c['fecha']);
+    $timestamp_fin    = $timestamp_inicio + 3600; 
 
-$pacientes_recientes = $pacientes_recientes ?? [
-    ['id_paciente' => 1, 'nombre' => 'Gael Salvador', 'apellido_paterno' => 'Alvarado', 'visita' => '10/10'],
-    ['id_paciente' => 2, 'nombre' => 'Alejandro', 'apellido_paterno' => 'Garduno', 'visita' => '12/10'],
-    ['id_paciente' => 3, 'nombre' => 'Dair', 'apellido_paterno' => 'Castillo', 'visita' => '13/10'],
-    ['id_paciente' => 4, 'nombre' => 'Ximena', 'apellido_paterno' => 'Flores', 'visita' => '13/10'],
-];
+    $eventos_citas[] = [
+        'id'    => (int)$c['id_cita'],
+        'title' => $c['paciente_nombre'] . ' ' . $c['paciente_apellido'],
+        'start' => date('Y-m-d\TH:i:s', $timestamp_inicio),
+        'end'   => date('Y-m-d\TH:i:s', $timestamp_fin),
+        'extendedProps' => [
+            'id_paciente' => (int)$c['id_paciente'],
+            'id_medico'   => (int)$c['id_medico'],
+            'medico'      => 'Dr. ' . $c['medico_nombre'] . ' ' . $c['medico_apellido'],
+            'estado'      => $c['estado']
+        ]
+    ];
+}
 
 include_once '../templatesReutilizables/header.php';
 include_once '../templatesReutilizables/sidebar.php';
@@ -63,7 +55,6 @@ include_once '../templatesReutilizables/sidebar.php';
 
     <!-- SECCIÓN PRINCIPAL DE CITAS -->
     <section class="bg-white p-4 rounded-3 shadow-sm mb-4">
-        <!-- Título y Botón "+ Nueva cita" -->
         <header class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="fw-bold mb-0">Citas</h4>
             <button type="button" class="btn btn-primary fw-semibold px-3 py-2 rounded-3" data-bs-toggle="modal" data-bs-target="#modalCita">
@@ -175,10 +166,20 @@ include_once '../templatesReutilizables/sidebar.php';
                             <td><time><?= date('d/m/Y H:i', strtotime($ev['start'])) ?></time></td>
                             <td><span class="badge <?= $badgeClase ?>"><?= ucfirst(htmlspecialchars($est)) ?></span></td>
                             <td class="text-end pe-3">
-                                <button type="button" class="btn btn-outline-primary btn-sm rounded-3 me-1" data-bs-toggle="modal" data-bs-target="#modalCita">
+                                <button type="button" class="btn btn-outline-primary btn-sm rounded-3 me-1"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalCita"
+                                    data-id="<?= (int)$ev['id'] ?>"
+                                    data-paciente="<?= (int)$ev['extendedProps']['id_paciente'] ?>"
+                                    data-fecha="<?= htmlspecialchars(substr($ev['start'], 0, 16)) ?>"
+                                    data-estado="<?= htmlspecialchars($est) ?>">
                                     <i class="bi bi-pencil"></i> Editar
                                 </button>
-                                <button type="button" class="btn btn-outline-danger btn-sm rounded-3">
+                                <button type="button" class="btn btn-outline-danger btn-sm rounded-3"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalEliminarCita"
+                                    data-id="<?= (int)$ev['id'] ?>"
+                                    data-paciente="<?= htmlspecialchars($ev['title']) ?>">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </td>
@@ -192,7 +193,7 @@ include_once '../templatesReutilizables/sidebar.php';
     <!-- MODAL CREAR / EDITAR CITA  -->
     <div class="modal fade" id="modalCita" tabindex="-1" aria-labelledby="modalCitaLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <form class="modal-content border-0 shadow" action="#" method="POST">
+            <form class="modal-content border-0 shadow" action="../controllers/citaController.php" method="POST">
                 <header class="modal-header bg-primary-subtle border-0">
                     <h5 class="modal-title fw-bold text-primary-emphasis" id="modalCitaLabel">
                         <i class="bi bi-calendar-plus me-2"></i>Agendar / Editar Cita
@@ -240,6 +241,36 @@ include_once '../templatesReutilizables/sidebar.php';
                     <button type="submit" class="btn btn-primary rounded-3 px-4 fw-semibold">Guardar Cita</button>
                 </footer>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMAR ELIMINACIÓN DE CITA -->
+    <div class="modal fade" id="modalEliminarCita" tabindex="-1" aria-labelledby="modalEliminarCitaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <header class="modal-header bg-danger-subtle border-0">
+                    <h5 class="modal-title fw-bold text-danger-emphasis" id="modalEliminarCitaLabel">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>Eliminar Cita
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </header>
+
+                <div class="modal-body p-4 text-center">
+                    <div class="mb-3 text-danger">
+                        <i class="bi bi-trash3 fs-1"></i>
+                    </div>
+                    <p class="mb-1 fs-6">¿Estás seguro de que deseas eliminar la cita del paciente:</p>
+                    <p class="fw-bold fs-5 text-dark mb-0" id="nombrePacienteEliminar"></p>
+                    <small class="text-muted">Esta acción no se puede deshacer.</small>
+                </div>
+
+                <footer class="modal-footer border-0 pt-0 px-4 pb-4 justify-content-center">
+                    <button type="button" class="btn btn-light rounded-3 px-4" data-bs-dismiss="modal">Cancelar</button>
+                    <a href="#" id="btnConfirmarEliminar" class="btn btn-danger rounded-3 px-4 fw-semibold">
+                        <i class="bi bi-trash me-1"></i>Sí, eliminar
+                    </a>
+                </footer>
+            </div>
         </div>
     </div>
 
