@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -14,19 +14,19 @@
 
     <main class="tarjeta-acceso">
         
-        <!-- ENCABEZADO -->
+        
         <header class="cabecera-tarjeta">
             <i class="bi bi-heart-pulse icono-logo"></i>
             <h3 class="titulo-tarjeta">Sistema De Gestión</h3>
         </header>
 
-        <!-- PESTAÑAS -->
+        
         <nav class="pestanas-navegacion">
             <a href="login.php" class="boton-pestana">Iniciar Sesión</a>
             <a href="registro.php" class="boton-pestana Activa">Registrarse</a>
         </nav>
 
-        <!-- FORMULARIO -->
+        
         <form action="#" method="POST">
             
             <div class="grupo-campo">
@@ -49,4 +49,4 @@
     </main>
 
 </body>
-</html>
+</html> -->
