@@ -1,14 +1,17 @@
 <?php
-class cita {
+class cita
+{
     private $conn;
     private $table_name = "cita";
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
     // Obtener todas las citas uniendo paciente y medico
-    public function obtenerCitas() {
+    public function obtenerCitas()
+    {
         $query = "SELECT 
                     c.id_cita,
                     c.id_paciente,
@@ -29,42 +32,45 @@ class cita {
     }
 
     //  Obtener lista de médicos 
-    public function obtenerMedicos() {
+    public function obtenerMedicos()
+    {
         $query = "SELECT id_medico, nombre, apellido_paterno, especialidad FROM medico ORDER BY nombre ASC";
         $resultado = $this->conn->query($query);
         return $resultado->fetch_all(MYSQLI_ASSOC);
     }
 
     // Obtener lista de pacientes 
-    public function obtenerPacientes() {
+    public function obtenerPacientes()
+    {
         $query = "SELECT id_paciente, nombre, apellido_paterno FROM paciente ORDER BY nombre ASC";
         $resultado = $this->conn->query($query);
         return $resultado->fetch_all(MYSQLI_ASSOC);
     }
 
     //  Crear y Insertar una nueva cita
-    public function crearCita($id_paciente, $fecha, $estado) {
+    public function crearCita($id_paciente, $fecha, $estado)
+    {
         $query = "INSERT INTO " . $this->table_name . " (id_paciente, fecha, estado) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("iss", $id_paciente, $fecha, $estado);
         return $stmt->execute();
     }
 
-    // 5. Actualizar y  modificar una cita existente por su id_cita
-    public function actualizarCita($id_cita, $id_paciente, $fecha, $estado) {
+    // Actualizar y  modificar una cita existente por su id_cita
+    public function actualizarCita($id_cita, $id_paciente, $fecha, $estado)
+    {
         $query = "UPDATE " . $this->table_name . " SET id_paciente = ?, fecha = ?, estado = ? WHERE id_cita = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("issi", $id_paciente, $fecha, $estado, $id_cita);
         return $stmt->execute();
     }
 
-    // 6.  Borrar una cita por su id_cita
-    public function eliminarCita($id_cita) {
+    //  Borrar una cita por su id_cita
+    public function eliminarCita($id_cita)
+    {
         $query = "DELETE FROM " . $this->table_name . " WHERE id_cita = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bind_param("i", $id_cita);
         return $stmt->execute();
     }
 }
-?>
-

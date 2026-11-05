@@ -27,8 +27,26 @@
             <a href="registro.php" class="boton-pestana">Registrarse</a>
         </nav>
 
+        <!-- MENSAJE DE ERROR (si falla el login) -->
+        <?php if (isset($_GET['error'])): ?>
+            <div style="background-color: #fee2e2; color: #b91c1c; border: 1px solid #f87171; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 0.88rem; display: flex; align-items: center; gap: 8px;">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span>
+                    <?php
+                    if ($_GET['error'] === 'credenciales_incorrectas') {
+                        echo 'Usuario o contraseña incorrectos.';
+                    } elseif ($_GET['error'] === 'cuenta_inactiva') {
+                        echo 'Esta cuenta se encuentra inactiva.';
+                    } else {
+                        echo 'Error al iniciar sesión.';
+                    }
+                    ?>
+                </span>
+            </div>
+        <?php endif; ?>
+
         <!-- FORMULARIO -->
-        <form action="citas.php" method="GET">
+        <form action="../controllers/loginController.php" method="POST">
             
             <!-- CAMPO :Username -->
             <div class="grupo-campo">

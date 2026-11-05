@@ -16,4 +16,3 @@ include_once '../templatesReutilizables/sidebar.php';
 <?php
 include_once '../templatesReutilizables/footer.php';
 ?>
-

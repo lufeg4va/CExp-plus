@@ -7,7 +7,7 @@ class usuario {
         $this->conn = $db;
     }
 
-    // Método para buscar un usuario por su username (Para el Login con MySQLi)
+    // Método para buscar un usuario por su username 
     public function getUsuarioByUsername($username) {
         // Consulta con marcador de posición '?' estándar en MySQLi
         $query = "SELECT id_usuario, username, contrasena, estado FROM " . $this->table_name . " WHERE username = ? LIMIT 1";
@@ -17,7 +17,7 @@ class usuario {
             die("Error al preparar la consulta: " . $this->conn->error);
         }
         
-        // Limpiar y vincular el parámetro ('s' indica que es tipo string)
+        // Limpiar y vincular el parámetro 
         $username = htmlspecialchars(strip_tags($username));
         $stmt->bind_param("s", $username);
         
