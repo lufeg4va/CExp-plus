@@ -1,31 +1,25 @@
 <?php
 class usuario {
-    private $conn;
+    private $conexion;
     private $table_name = "usuario";
 
     public function __construct($db) {
-        $this->conn = $db;
+        $this->conexion = $db;
     }
 
-    // Método para buscar un usuario por su username 
+    // Método para buscar un usuario por su username
     public function getUsuarioByUsername($username) {
-        // Consulta con marcador de posición '?' estándar en MySQLi
-        $query = "SELECT id_usuario, username, contrasena, estado FROM " . $this->table_name . " WHERE username = ? LIMIT 1";
+        // Uso de consultas preparadas (evita Inyección SQL)
+        $query = "SELECT id_usuario, username, contrasena, estado FROM " . $this->table_name . " WHERE username = :username LIMIT 1";
         
-        $stmt = $this->conn->prepare($query);
-        if (!$stmt) {
-            die("Error al preparar la consulta: " . $this->conn->error);
-        }
+        $stmt = $this->conexion->prepare($query);
         
-        // Limpiar y vincular el parámetro 
+        // Limpiar y vincular el parámetro
         $username = htmlspecialchars(strip_tags($username));
-        $stmt->bind_param("s", $username);
+        $stmt->bindParam(":username", $username);
         
         $stmt->execute();
-        $resultado = $stmt->get_result();
-        
-        // Retornar el array asociativo del usuario o null si no existe
-        return $resultado->fetch_assoc();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
 ?>

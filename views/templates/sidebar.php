@@ -3,7 +3,7 @@
 $pagina_activa = $pagina_activa ?? '';
 ?>
 
-<aside class="col-md-3 col-lg-2 p-3 bg-white d-flex flex-column border-end shadow-sm vh-100 sticky-top" id="sidebar">
+<aside class="col-md-3 col-lg-2 p-3 bg-white d-flex flex-column border-end shadow-sm" id="sidebar">
 
     <!-- Perfil del Médico -->
     <div class="profile-card d-flex align-items-center gap-2 p-2 mb-4 border rounded-3 bg-light">
@@ -21,12 +21,6 @@ $pagina_activa = $pagina_activa ?? '';
     <h6 class="text-muted fw-bold mb-3">MENÚ PRINCIPAL</h6>
 
     <nav class="nav flex-column mb-auto gap-2">
-        <!-- Reportes / Dashboard (Primera vista al iniciar sesión) -->
-        <a href='reportes.php' class='nav-link sidebar-item d-flex align-items-center p-3 <?= ($pagina_activa === 'reportes') ? 'active' : '' ?>'>
-            <i class="bi bi-bar-chart-line me-2"></i>
-            <span class='fw-bold'>Reportes</span>
-        </a>
-
         <!-- Consultas -->
         <a href='consultas.php' class='nav-link sidebar-item d-flex align-items-center p-3 <?= ($pagina_activa === 'consultas') ? 'active' : '' ?>'>
             <i class="bi bi-heart-pulse me-2"></i>
@@ -55,6 +49,12 @@ $pagina_activa = $pagina_activa ?? '';
         <a href='agenda.php' class='nav-link sidebar-item d-flex align-items-center p-3 <?= ($pagina_activa === 'agenda') ? 'active' : '' ?>'>
             <i class="bi bi-journal-text me-2"></i>
             <span class='fw-bold'>Agenda</span>
+        </a>
+
+        <!-- Reportes -->
+        <a href='reportes.php' class='nav-link sidebar-item d-flex align-items-center p-3 <?= ($pagina_activa === 'reportes') ? 'active' : '' ?>'>
+            <i class="bi bi-bar-chart-line me-2"></i>
+            <span class='fw-bold'>Reportes</span>
         </a>
 
         <!-- Configuración -->
