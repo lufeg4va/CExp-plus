@@ -21,6 +21,12 @@ $pagina_activa = $pagina_activa ?? '';
     <h6 class="text-muted fw-bold mb-3">MENÚ PRINCIPAL</h6>
 
     <nav class="nav flex-column mb-auto gap-2">
+        <!-- Reportes / Dashboard (Primera vista al iniciar sesión) -->
+        <a href='reportes.php' class='nav-link sidebar-item d-flex align-items-center p-3 <?= ($pagina_activa === 'reportes') ? 'active' : '' ?>'>
+            <i class="bi bi-bar-chart-line me-2"></i>
+            <span class='fw-bold'>Reportes</span>
+        </a>
+
         <!-- Consultas -->
         <a href='consultas.php' class='nav-link sidebar-item d-flex align-items-center p-3 <?= ($pagina_activa === 'consultas') ? 'active' : '' ?>'>
             <i class="bi bi-heart-pulse me-2"></i>
@@ -51,12 +57,6 @@ $pagina_activa = $pagina_activa ?? '';
             <span class='fw-bold'>Agenda</span>
         </a>
 
-        <!-- Reportes -->
-        <a href='reportes.php' class='nav-link sidebar-item d-flex align-items-center p-3 <?= ($pagina_activa === 'reportes') ? 'active' : '' ?>'>
-            <i class="bi bi-bar-chart-line me-2"></i>
-            <span class='fw-bold'>Reportes</span>
-        </a>
-
         <!-- Configuración -->
         <a href='configuracion.php' class='nav-link sidebar-item d-flex align-items-center p-3 <?= ($pagina_activa === 'configuracion') ? 'active' : '' ?>'>
             <i class="bi bi-gear me-2"></i>
@@ -69,3 +69,4 @@ $pagina_activa = $pagina_activa ?? '';
         <a href="../controllers/logoutController.php" class="btn btn-danger w-100"><i class="bi bi-box-arrow-right m-1"></i>Cerrar sesión</a>
     </div>
 </aside>
+

@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Login exitoso
             $_SESSION['id_usuario'] = $datos_usuario['id_usuario'];
             $_SESSION['username']   = $datos_usuario['username'];
-            header("Location: ../views/citas.php");
+            header("Location: ../views/reportes.php");
             exit();
         } else {
             header("Location: ../views/login.php?error=cuenta_inactiva");
